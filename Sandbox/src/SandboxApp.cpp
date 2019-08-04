@@ -1,5 +1,4 @@
-
-#include<Hazel.h>
+#include <Hazel.h>
 
 #include "Platform/OpenGL/OpenGLShader.h"
 #include "imgui/imgui.h"
