@@ -266,3 +266,5 @@ __pycache__/
 *.tlog
 *.lastbuildstate
 Sandbox/HazelProfile-Runtime.json
+Sandbox/HazelProfile-Shutdown.json
+Sandbox/HazelProfile-Startup.json
