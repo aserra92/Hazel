@@ -159,6 +159,7 @@ void Sandbox2D::OnImGuiRender()
 	ImGui::ColorEdit4("Square color", glm::value_ptr(m_SquareColor));
 	ImGui::End();
 
+#if 0
 	static bool dockspaceOpen = true;
 	static bool opt_fullscreen_persistant = true;
 	static ImGuiDockNodeFlags opt_flags = ImGuiDockNodeFlags_None;
@@ -220,4 +221,5 @@ void Sandbox2D::OnImGuiRender()
 	}
 
 	ImGui::End();
+#endif
 }

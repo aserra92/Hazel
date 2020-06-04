@@ -98,6 +98,7 @@ namespace Hazel
 	void Renderer2D::Shutdown()
 	{
 		HZ_PROFILE_FUNCTION();
+		delete[] s_Data.QuadVertexBufferBase;
 	}
 
 	void Renderer2D::BeginScene(const OrthographicCamera& camera)
@@ -116,7 +117,7 @@ namespace Hazel
 	{
 		HZ_PROFILE_FUNCTION();
 		
-		uint32_t dataSize = (uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase;
+		uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase);
 		s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
 
 		Flush();
@@ -188,7 +189,6 @@ namespace Hazel
 		HZ_PROFILE_FUNCTION();
 
 		constexpr size_t quadVertexCount = 4;
-		constexpr glm::vec4 color = { 1.0f, 1.0f,1.0f, 1.0f };
 		constexpr glm::vec2 textureCoords[] = { {0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f} };
 
 		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
@@ -220,7 +220,7 @@ namespace Hazel
 		for (size_t i = 0; i < quadVertexCount; i++)
 		{
 			s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[i];
-			s_Data.QuadVertexBufferPtr->Color = color;
+			s_Data.QuadVertexBufferPtr->Color = tintColor;
 			s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
 			s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
 			s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
@@ -242,7 +242,6 @@ namespace Hazel
 		HZ_PROFILE_FUNCTION();
 
 		constexpr size_t quadVertexCount = 4;
-		constexpr glm::vec4 color = { 1.0f, 1.0f,1.0f, 1.0f };
 		const glm::vec2* textureCoords = subtexture->GetTexCoords();
 		const Ref<Texture2D> texture = subtexture->GetTexture();
 
@@ -275,7 +274,7 @@ namespace Hazel
 		for (size_t i = 0; i < quadVertexCount; i++)
 		{
 			s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[i];
-			s_Data.QuadVertexBufferPtr->Color = color;
+			s_Data.QuadVertexBufferPtr->Color = tintColor;
 			s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
 			s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
 			s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
@@ -332,7 +331,6 @@ namespace Hazel
 		HZ_PROFILE_FUNCTION();
 
 		constexpr size_t quadVertexCount = 4;
-		constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 		constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
 
 		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
@@ -365,7 +363,7 @@ namespace Hazel
 		for (size_t i = 0; i < quadVertexCount; i++)
 		{
 			s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[i];
-			s_Data.QuadVertexBufferPtr->Color = color;
+			s_Data.QuadVertexBufferPtr->Color = tintColor;
 			s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
 			s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
 			s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
@@ -387,7 +385,6 @@ namespace Hazel
 		HZ_PROFILE_FUNCTION();
 
 		constexpr size_t quadVertexCount = 4;
-		constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 		const glm::vec2* textureCoords = subtexture->GetTexCoords();
 		const Ref<Texture2D> texture = subtexture->GetTexture();
 
@@ -421,7 +418,7 @@ namespace Hazel
 		for (size_t i = 0; i < quadVertexCount; i++)
 		{
 			s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[i];
-			s_Data.QuadVertexBufferPtr->Color = color;
+			s_Data.QuadVertexBufferPtr->Color = tintColor;
 			s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
 			s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
 			s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
@@ -440,6 +437,6 @@ namespace Hazel
 
 	void Renderer2D::ResetStats()
 	{
-		memset(&s_Data.Stats, 0, sizeof(Renderer2D::Statistics));
+		memset(&s_Data.Stats, 0, sizeof(Statistics));
 	}
 }

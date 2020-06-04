@@ -19,7 +19,7 @@ namespace Hazel {
 		s_Instance = this;
 
 		m_Window = Window::Create();
-		m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
+		m_Window->SetEventCallback(HZ_BIND_EVENT_FN(Application::OnEvent));
 		
 		Renderer::Init();
 
