@@ -76,11 +76,13 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>hzpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;HZ_PLATFORM_WINDOWS;HZ_BUILD_DLL;GLFW_INCLUDE_NONE;HZ_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;Vendor\Glad\include;Vendor\imgui;Vendor\glm;Vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLFW_INCLUDE_NONE;HZ_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
+      <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -96,14 +98,15 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>hzpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;HZ_PLATFORM_WINDOWS;HZ_BUILD_DLL;GLFW_INCLUDE_NONE;HZ_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;Vendor\Glad\include;Vendor\imgui;Vendor\glm;Vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLFW_INCLUDE_NONE;HZ_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -120,14 +123,15 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>hzpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;HZ_PLATFORM_WINDOWS;HZ_BUILD_DLL;GLFW_INCLUDE_NONE;HZ_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;Vendor\Glad\include;Vendor\imgui;Vendor\glm;Vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLFW_INCLUDE_NONE;HZ_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -142,14 +146,14 @@
   <ItemGroup>
     <ClInclude Include="src\Hazel.h" />
     <ClInclude Include="src\Hazel\Core\Application.h" />
-    <ClInclude Include="src\Hazel\Core\Core.h" />
+    <ClInclude Include="src\Hazel\Core\Base.h" />
     <ClInclude Include="src\Hazel\Core\EntryPoint.h" />
     <ClInclude Include="src\Hazel\Core\Input.h" />
     <ClInclude Include="src\Hazel\Core\KeyCodes.h" />
     <ClInclude Include="src\Hazel\Core\Layer.h" />
     <ClInclude Include="src\Hazel\Core\LayerStack.h" />
     <ClInclude Include="src\Hazel\Core\Log.h" />
-    <ClInclude Include="src\Hazel\Core\MouseButtonCodes.h" />
+    <ClInclude Include="src\Hazel\Core\MouseCodes.h" />
     <ClInclude Include="src\Hazel\Core\TimeStep.h" />
     <ClInclude Include="src\Hazel\Core\Window.h" />
     <ClInclude Include="src\Hazel\Debug\Instrumentor.h" />

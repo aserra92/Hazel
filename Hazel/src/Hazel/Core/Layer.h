@@ -1,20 +1,20 @@
 #pragma once
 
-#include "Hazel/Core/Core.h"
+#include "Hazel/Core/Base.h"
 #include "Hazel/Core/TimeStep.h"
 #include "Hazel/Events/Event.h"
 
 namespace Hazel {
-	class HAZEL_API Layer
+	class Layer
 	{
 	public:
 		Layer(const std::string& name = "Layer");
-		virtual ~Layer();
+		virtual ~Layer() = default;
 
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
 		virtual void OnUpdate(TimeStep ts) {}
-		virtual void OnImGuiRender(){}
+		virtual void OnImGuiRender() {}
 		virtual void OnEvent(Event& event) {}
 
 		inline const std::string& GetName() const{ return m_DebugName; }
