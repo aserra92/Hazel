@@ -149,17 +149,6 @@ void Sandbox2D::OnEvent(Hazel::Event& e)
 void Sandbox2D::OnImGuiRender()
 {
 	HZ_PROFILE_FUNCTION();
-	ImGui::Begin("Settings");
-	auto stats = Hazel::Renderer2D::GetStats();
-	ImGui::Text("Renderer2D Stats:");
-	ImGui::Text("Draw Calls: %d", stats.DrawCalls);
-	ImGui::Text("Quads: %d", stats.QuadCount);
-	ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
-	ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
-	ImGui::ColorEdit4("Square color", glm::value_ptr(m_SquareColor));
-	ImGui::End();
-
-#if 0
 	static bool dockspaceOpen = true;
 	static bool opt_fullscreen_persistant = true;
 	static ImGuiDockNodeFlags opt_flags = ImGuiDockNodeFlags_None;
@@ -201,25 +190,33 @@ void Sandbox2D::OnImGuiRender()
 
 	if (ImGui::BeginMenuBar())
 	{
-		if (ImGui::BeginMenu("Docking"))
+		if (ImGui::BeginMenu("File"))
 		{
 			// Disabling fullscreen would allow the window to be moved to the front of other windows, 
 			// which we can't undo at the moment without finer window depth/z control.
 			//ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen_persistant);
 
-			if (ImGui::MenuItem("Flag: NoSplit", "", (opt_flags & ImGuiDockNodeFlags_NoSplit) != 0))                 opt_flags ^= ImGuiDockNodeFlags_NoSplit;
-			if (ImGui::MenuItem("Flag: NoDockingInCentralNode", "", (opt_flags & ImGuiDockNodeFlags_NoDockingInCentralNode) != 0))  opt_flags ^= ImGuiDockNodeFlags_NoDockingInCentralNode;
-			if (ImGui::MenuItem("Flag: NoResize", "", (opt_flags & ImGuiDockNodeFlags_NoResize) != 0))                opt_flags ^= ImGuiDockNodeFlags_NoResize;
-			if (ImGui::MenuItem("Flag: PassthruDockspace", "", (opt_flags & ImGuiDockNodeFlags_PassthruDockspace) != 0))       opt_flags ^= ImGuiDockNodeFlags_PassthruDockspace;
-			ImGui::Separator();
-			if (ImGui::MenuItem("Close DockSpace", NULL, false))
-				dockspaceOpen = false;
+			if (ImGui::MenuItem("Exit"))
+				Hazel::Application::Get().Close();
 			ImGui::EndMenu();
 		}
 
 		ImGui::EndMenuBar();
 	}
 
+	ImGui::Begin("Settings");
+	auto stats = Hazel::Renderer2D::GetStats();
+	ImGui::Text("Renderer2D Stats:");
+	ImGui::Text("Draw Calls: %d", stats.DrawCalls);
+	ImGui::Text("Quads: %d", stats.QuadCount);
+	ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
+	ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
+	ImGui::ColorEdit4("Square color", glm::value_ptr(m_SquareColor));
+
+	uint32_t textureId = m_CheckerboardTexture->GetRendererID();
+	ImGui::Image((void*)textureId, ImVec2{ 256.0f, 256.0f });
+
 	ImGui::End();
-#endif
+
+	ImGui::End();
 }
