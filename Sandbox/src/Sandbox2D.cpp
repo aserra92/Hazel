@@ -53,6 +53,11 @@ void Sandbox2D::OnAttach()
 	m_Particle.Position = { 0.0f, 0.0f };
 
 	m_CameraController.SetZoomLevel(5.0f);
+
+	Hazel::FrameBufferSpecification fbSpec;
+	fbSpec.Width = 1280;
+	fbSpec.Height = 720;
+	m_FrameBuffer = Hazel::FrameBuffer::Create(fbSpec);
 }
 
 void Sandbox2D::OnDetach()
@@ -69,6 +74,7 @@ void Sandbox2D::OnUpdate(Hazel::TimeStep ts)
 	Hazel::Renderer2D::ResetStats();
 	{
 		HZ_PROFILE_SCOPE("Renderer Prep");
+		m_FrameBuffer->Bind();
 		Hazel::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		Hazel::RenderCommand::Clear();
 	}
@@ -138,6 +144,7 @@ void Sandbox2D::OnUpdate(Hazel::TimeStep ts)
 
 		m_ParticleSystem.OnUpdate(ts);
 		m_ParticleSystem.OnRender(m_CameraController.GetCamera());
+		m_FrameBuffer->Unbind();
 	}
 }
 
@@ -213,8 +220,8 @@ void Sandbox2D::OnImGuiRender()
 	ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 	ImGui::ColorEdit4("Square color", glm::value_ptr(m_SquareColor));
 
-	uint32_t textureId = m_CheckerboardTexture->GetRendererID();
-	ImGui::Image((void*)textureId, ImVec2{ 256.0f, 256.0f });
+	uint32_t textureId = m_FrameBuffer->GetColorAttachmentRendererID();
+	ImGui::Image((void*)textureId, ImVec2{ 1280.0f, 720.0f });
 
 	ImGui::End();
 
