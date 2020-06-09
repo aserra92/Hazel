@@ -268,3 +268,5 @@ __pycache__/
 Sandbox/HazelProfile-Runtime.json
 Sandbox/HazelProfile-Shutdown.json
 Sandbox/HazelProfile-Startup.json
+Hazel/vendor/Glad/bin-int
+Sandbox/imgui.ini
