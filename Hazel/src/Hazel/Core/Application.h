@@ -26,6 +26,8 @@ namespace Hazel {
 
 		Window& GetWindow() { return *m_Window; }
 		static Application& Get() { return *s_Instance; }
+
+		ImGuiLayer* GetImGuiLayer() { return m_ImGuiLayer; }
 	private:
 		void Run();
 		bool OnWindowClose(WindowCloseEvent& e);
