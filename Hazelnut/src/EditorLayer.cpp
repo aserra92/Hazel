@@ -8,7 +8,8 @@ namespace Hazel
 {
 	EditorLayer::EditorLayer() :
 		Layer("EditorLayer"),
-		m_CameraController(1280.0f / 720.0f)
+		m_CameraController(1280.0f / 720.0f),
+		m_SquareColor({ 0.2f, 0.3f, 0.8f, 1.0f })
 	{
 	}
 
@@ -24,9 +25,9 @@ namespace Hazel
 		m_FrameBuffer = FrameBuffer::Create(fbSpec);
 
 		m_ActiveScene = CreateRef<Scene>();
-		m_SquareEntity = m_ActiveScene->CreateEntity();
-		m_ActiveScene->Reg().emplace<TransformComponent>(m_SquareEntity);
-		m_ActiveScene->Reg().emplace<SpriteRendererComponent>(m_SquareEntity, glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
+		auto square = m_ActiveScene->CreateEntity("Green Square");
+		square.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
+		m_SquareEntity = square;
 	}
 
 	void EditorLayer::OnDetach()
@@ -38,7 +39,7 @@ namespace Hazel
 	{
 		HZ_PROFILE_FUNCTION();
 		// Resize
-		if (auto spec = m_FrameBuffer->GetSpecification();
+		if (Hazel::FrameBufferSpecification spec = m_FrameBuffer->GetSpecification();
 			m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f && // zero sized framebuffer is invalid
 			(spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y))
 		{
@@ -46,9 +47,9 @@ namespace Hazel
 			m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
 		}
 
-		if(m_ViewportFocused)
+		if (m_ViewportFocused)
 			m_CameraController.OnUpdate(ts);
-		
+
 		Renderer2D::ResetStats();
 		m_FrameBuffer->Bind();
 		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
@@ -133,8 +134,14 @@ namespace Hazel
 		ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 
-		auto& color = m_ActiveScene->Reg().get<SpriteRendererComponent>(m_SquareEntity).Color;
-		ImGui::ColorEdit4("Square Color", glm::value_ptr(color));
+		if (m_SquareEntity)
+		{
+			ImGui::Separator();
+			ImGui::Text("%s", m_SquareEntity.GetComponent<TagComponent>().Tag.c_str());
+			auto& color = m_SquareEntity.GetComponent<SpriteRendererComponent>().Color;
+			ImGui::ColorEdit4("Square Color", glm::value_ptr(color));
+			ImGui::Separator();
+		}
 
 		ImGui::End();
 
@@ -146,7 +153,7 @@ namespace Hazel
 		Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused || !m_ViewportHovered);
 
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-		if (m_ViewportSize != *((glm::vec2*)&viewportPanelSize) && viewportPanelSize.x > 0 && viewportPanelSize.y > 0)
+		if (m_ViewportSize != *((glm::vec2*) & viewportPanelSize) && viewportPanelSize.x > 0 && viewportPanelSize.y > 0)
 		{
 			m_FrameBuffer->Resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
 			m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
