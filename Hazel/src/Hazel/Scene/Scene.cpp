@@ -49,19 +49,37 @@ namespace Hazel {
 
 	void Scene::OnUpdate(TimeStep ts)
 	{
-		/*auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-		for (auto entity : group)
+		Camera* mainCamera = nullptr;
+		glm::mat4* mainCameraTransform = nullptr;
 		{
-			auto& [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+			auto view = m_Registry.view<CameraComponent>();
+			for (auto entity : view)
+			{
+				auto& camera = view.get<CameraComponent>(entity);
+				if (camera.Primary)
+				{
+					mainCamera = &camera.Camera;
+					mainCameraTransform = &m_Registry.get<TransformComponent>(entity).Transform;
+					break;
+				}
+			}
 
-			Renderer2D::DrawQuad(transform, sprite.Color);
-		}*/
-		auto view = m_Registry.view<TransformComponent>();
-		for (auto entity : view)
+		}
+		
+		if (mainCamera)
 		{
-			TransformComponent& transform = view.get<TransformComponent>(entity);
-			SpriteRendererComponent sprite = m_Registry.get<SpriteRendererComponent>(entity);
-			Renderer2D::DrawQuad(transform, sprite.Color);
+			Renderer2D::BeginScene(mainCamera->GetProjection(), *mainCameraTransform);
+			auto view = m_Registry.view<TransformComponent>();
+			for (auto entity : view)
+			{
+				if (m_Registry.has<SpriteRendererComponent>(entity))
+				{
+					TransformComponent& transform = view.get<TransformComponent>(entity);
+					SpriteRendererComponent sprite = m_Registry.get<SpriteRendererComponent>(entity);
+					Renderer2D::DrawQuad(transform, sprite.Color);
+				}
+			}
+			Renderer2D::EndScene();
 		}
 	}
 }
