@@ -19,7 +19,7 @@ namespace Hazel {
 	{
 		Entity entity = { m_Registry.create(), this };
 		entity.AddComponent<TransformComponent>();
-		auto& tag = entity.AddComponent<TagComponent>();
+		auto tag = entity.AddComponent<TagComponent>();
 		tag.Tag = name.empty() ? "Entity" : name;
 		return entity;
 	}
@@ -29,17 +29,15 @@ namespace Hazel {
 		//Update scripts
 		{
 			m_Registry.view<NativeScriptComponent>().each([=](auto entity, NativeScriptComponent& nsc)
-			{
+				{
 					if (!nsc.Instance)
 					{
-						nsc.InstantiateFunction();
+						nsc.Instance = nsc.InstantiateScript();
 						nsc.Instance->m_Entity = Entity{ entity, this };
-						if(nsc.OnCreateFunction)
-							nsc.OnCreateFunction(nsc.Instance);
+						nsc.Instance->OnCreate();
 					}
-					if(nsc.OnUpdateFunction)
-						nsc.OnUpdateFunction(nsc.Instance, ts);
-			});
+					nsc.Instance->OnUpdate(ts);
+				});
 		}
 
 		Camera* mainCamera = nullptr;
