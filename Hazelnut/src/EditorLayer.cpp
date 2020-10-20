@@ -47,20 +47,22 @@ namespace Hazel
 			float m_Speed = 5.0f;
 			void OnCreate()
 			{
+				auto& translation = GetComponent<TransformComponent>().Translation;
+				translation.x = rand() % 10 - 5.0f;
 			}
 
 			void OnUpdate(TimeStep ts) 
 			{
-				auto& transform = GetComponent<TransformComponent>().Transform;
+				auto& translation = GetComponent<TransformComponent>().Translation;
 
 				if (Input::IsKeyPressed(KeyCode::A))
-					transform[3][0] -= m_Speed * ts;
+					translation.x -= m_Speed * ts;
 				if (Input::IsKeyPressed(KeyCode::D))
-					transform[3][0] += m_Speed * ts;
+					translation.x += m_Speed * ts;
 				if (Input::IsKeyPressed(KeyCode::S))
-					transform[3][1] -= m_Speed * ts;
+					translation.y -= m_Speed * ts;
 				if (Input::IsKeyPressed(KeyCode::W))
-					transform[3][1] += m_Speed * ts;
+					translation.y += m_Speed * ts;
 			}
 
 			void OnDestroy() {}
