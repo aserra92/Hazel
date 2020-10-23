@@ -13,3 +13,6 @@
 [submodule "Hazel/vendor/glfw"]
 	path = Hazel/vendor/glfw
 	url = https://github.com/aserra92/glfw.git
+[submodule "Hazel/vendor/yaml-cpp"]
+	path = Hazel/vendor/yaml-cpp
+	url = https://github.com/aserra92/yaml-cpp.git

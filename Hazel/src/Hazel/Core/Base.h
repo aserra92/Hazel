@@ -1,60 +1,23 @@
 #pragma once
 #include <memory>
-
-#ifdef _WIN32
-	#ifdef _WIN64
-		#define HZ_PLATFORM_WINDOWS
-	#else
-		#error "x86 Builds are not supported!"
-	#endif
-#elif defined(__APPLE__) || defined(__MACH__)
-	#include <TargetConditionals.h>
-	#if TARGET_IPHONE_SIMULATION == 1
-		#error "IOS simulator is not supported!"
-	#elif TARGET_OS_IPHONE == 1
-		#define HZ_PLATFORM_IOS
-		#error "IOS is not supported!!"
-	#elif TARGET_OS_MAC == 1
-		#define HZ_PLATFORM_MACOS
-		#error "MacOS is not supported!!"
-	#else
-		#error "Unknown Apple platform!"
-	#endif
-#elif defined(__ANDROID__)
-	#define HZ_PLATFORM_ANDROID
-	#error "Android is not supported!"
-#elif defined(__LINUX__)
-	#define HZ_PLATFORM_LINUX
-	#error "Linux is not supported!"
-#else
-	#error "Unknown platform!!"
-#endif
+#include "PlatformDetection.h"
 
 #ifdef HZ_DEBUG
-	#define HZ_ENABLE_ASSERTS
-#endif
-
-#ifdef HZ_PLATFORM_WINDOWS
-	#if HZ_DYNAMIC_LINK
-		#ifdef HZ_BUILD_DLL
-			#define HAZEL_API __declspec(dllexport)
-		#else
-			#define HAZEL_API __declspec(dllimport)
-		#endif
+	#if defined(HZ_PLATFORM_WINDOWS)
+		#define HZ_DEBUGBREAK() __debugbreak()
+	#elif defined(HZ_PLATFORM_LINUX)
+		#include <signal.h>
+		#define HZ_DEBUGBREAK() raise(SIGTRAP)
 	#else
-		#define HAZEL_API
+		#error "Platform doesn't support debugbreak yet!"
 	#endif
+	#define HZ_ENABLE_ASSERTS
 #else
-	#error "Hazel only supports Windows!"
+	#define HZ_DEBUGBREAK()
 #endif
 
-#ifdef HZ_ENABLE_ASSERTS
-	#define HZ_ASSERT(x, ...) { if(!(x)) { HZ_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak();} }
-	#define HZ_CORE_ASSERT(x, ...) { if(!(x)) { HZ_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak();} }
-#else
-	#define HZ_ASSERT(x, ...)
-	#define HZ_CORE_ASSERT(x, ...)
-#endif
+#define HZ_EXPAND_MACRO(x) x
+#define HZ_STRINGIFY_MACRO(x) #x
 
 #define BIT(x) (1 << x)
 
@@ -78,3 +41,6 @@ namespace Hazel
 		return std::make_shared<T>(std::forward<Args>(args)...);
 	}
 }
+
+#include "Hazel/Core/Log.h"
+#include "Hazel/Core/Assert.h"

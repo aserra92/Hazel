@@ -19,6 +19,9 @@
     <Filter Include="..\Hazel\vendor\imgui">
       <UniqueIdentifier>{2BE4F717-9750-B312-6044-4B70CC6FD57A}</UniqueIdentifier>
     </Filter>
+    <Filter Include="..\Hazel\vendor\yaml-cpp">
+      <UniqueIdentifier>{D35154DB-BF76-A35B-E8C1-88EBD445A279}</UniqueIdentifier>
+    </Filter>
     <Filter Include="..\Hazelnut">
       <UniqueIdentifier>{1B351CC0-87EA-94B5-10DF-8E8C7C938BB9}</UniqueIdentifier>
     </Filter>
@@ -38,6 +41,9 @@
     </None>
     <None Include="..\..\Hazel\vendor\imgui\premake5.lua">
       <Filter>..\Hazel\vendor\imgui</Filter>
+    </None>
+    <None Include="..\..\Hazel\vendor\yaml-cpp\premake5.lua">
+      <Filter>..\Hazel\vendor\yaml-cpp</Filter>
     </None>
     <None Include="..\..\Hazelnut\premake5.lua">
       <Filter>..\Hazelnut</Filter>
