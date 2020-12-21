@@ -29,7 +29,7 @@ namespace Hazel {
 		m_Registry.destroy(entity);
 	}
 
-	void Scene::OnUpdate(TimeStep ts)
+	void Scene::OnUpdateRuntime(TimeStep ts)
 	{
 		//Update scripts
 		{
@@ -77,6 +77,22 @@ namespace Hazel {
 			}
 			Renderer2D::EndScene();
 		}
+	}
+
+	void Scene::OnUpdateEditor(TimeStep ts, EditorCamera& camera)
+	{
+		Renderer2D::BeginScene(camera);
+		auto view = m_Registry.view<TransformComponent>();
+		for (auto entity : view)
+		{
+			if (m_Registry.has<SpriteRendererComponent>(entity))
+			{
+				TransformComponent& transform = view.get<TransformComponent>(entity);
+				SpriteRendererComponent sprite = m_Registry.get<SpriteRendererComponent>(entity);
+				Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color);
+			}
+		}
+		Renderer2D::EndScene();
 	}
 
 	void Scene::OnViewportResize(uint32_t width, uint32_t height)

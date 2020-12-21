@@ -35,6 +35,8 @@ namespace Hazel
 		Entity m_SecondCameraEntity;
 		bool m_PrimaryCamera = false;
 
+		EditorCamera m_EditorCamera;
+
 		Ref<Texture2D> m_CheckerboardTexture;
 
 		bool m_ViewportFocused = false, m_ViewportHovered = false;
