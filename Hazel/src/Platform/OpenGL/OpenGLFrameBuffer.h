@@ -21,6 +21,7 @@ namespace Hazel {
 	private:
 		uint32_t m_RendererID = 0;
 		uint32_t m_ColorAttachment = 0, m_DepthAttachment = 0;
+		uint32_t m_IDAttachment = 0;
 		FrameBufferSpecification m_Specification;
 	};
 }
