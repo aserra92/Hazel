@@ -26,6 +26,7 @@ namespace Hazel
 		m_CheckerboardTexture = Texture2D::Create("assets/textures/CheckerBoard.png");
 
 		FrameBufferSpecification fbSpec;
+		fbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth };
 		fbSpec.Width = 1280;
 		fbSpec.Height = 720;
 		m_FrameBuffer = FrameBuffer::Create(fbSpec);
