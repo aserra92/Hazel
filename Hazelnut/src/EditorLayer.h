@@ -18,7 +18,6 @@ namespace Hazel
 		virtual void OnImGuiRender() override;
 	private:
 		bool OnKeyPressed(KeyPressedEvent& e);
-		bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
 
 		void NewScene();
 		void OpenScene();
@@ -29,7 +28,6 @@ namespace Hazel
 		Ref<VertexArray> m_SquareVA;
 		Ref<Shader> m_FlatColorShader;
 		Ref<FrameBuffer> m_FrameBuffer;
-		Ref<FrameBuffer> m_IDFrameBuffer;
 
 		Ref<Scene> m_ActiveScene;
 		Entity m_SquareEntity;
@@ -37,15 +35,12 @@ namespace Hazel
 		Entity m_SecondCameraEntity;
 		bool m_PrimaryCamera = false;
 
-		Entity m_HoveredEntity;
-
 		EditorCamera m_EditorCamera;
 
 		Ref<Texture2D> m_CheckerboardTexture;
 
 		bool m_ViewportFocused = false, m_ViewportHovered = false;
 		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
-		glm::vec2 m_ViewportBounds[2];
 
 		glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
 

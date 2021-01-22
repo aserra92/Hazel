@@ -5,7 +5,7 @@
 #include "Hazel/Scene/Entity.h"
 
 #include <glm/glm.hpp>
-#include <glad/glad.h>
+
 namespace Hazel {
 	Scene::Scene()
 	{
@@ -72,7 +72,7 @@ namespace Hazel {
 				{
 					TransformComponent& transform = view.get<TransformComponent>(entity);
 					SpriteRendererComponent sprite = m_Registry.get<SpriteRendererComponent>(entity);
-					Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color, (uint32_t)entity);
+					Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color);
 				}
 			}
 			Renderer2D::EndScene();
@@ -89,7 +89,7 @@ namespace Hazel {
 			{
 				TransformComponent& transform = view.get<TransformComponent>(entity);
 				SpriteRendererComponent sprite = m_Registry.get<SpriteRendererComponent>(entity);
-				Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color, (uint32_t)entity);
+				Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color);
 			}
 		}
 		Renderer2D::EndScene();
@@ -108,14 +108,6 @@ namespace Hazel {
 			if (!cameraComponent.FixedAspectRatio)
 				cameraComponent.Camera.SetViewportSize(width, height);
 		}
-	}
-
-	int Scene::Pixel(int x, int y)
-	{
-		glReadBuffer(GL_COLOR_ATTACHMENT1);
-		int pixelData;
-		glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixelData);
-		return pixelData;
 	}
 
 	Entity Scene::GetPrimaryCameraEntity()
