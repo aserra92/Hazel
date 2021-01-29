@@ -26,7 +26,7 @@ namespace Hazel
 		m_CheckerboardTexture = Texture2D::Create("assets/textures/CheckerBoard.png");
 
 		FrameBufferSpecification fbSpec;
-		fbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth };
+		fbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
 		fbSpec.Width = 1280;
 		fbSpec.Height = 720;
 		m_FrameBuffer = FrameBuffer::Create(fbSpec);
@@ -34,54 +34,6 @@ namespace Hazel
 		m_ActiveScene = CreateRef<Scene>();
 
 		m_EditorCamera = EditorCamera(30.0f, 16.0f / 9.0f, 0.1f, 1000.0f);
-
-#if 0
-
-
-		auto square = m_ActiveScene->CreateEntity("Green Square");
-		square.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
-
-		auto redSquare = m_ActiveScene->CreateEntity("Red Square");
-		redSquare.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 0.0f, 0.0f, 1.0f });
-
-		m_SquareEntity = square;
-
-		m_CameraEntity = m_ActiveScene->CreateEntity("Camera A");
-		m_CameraEntity.AddComponent<CameraComponent>();
-
-		m_SecondCameraEntity = m_ActiveScene->CreateEntity("Camera B");
-		m_SecondCameraEntity.AddComponent<CameraComponent>();
-		m_SecondCameraEntity.GetComponent<CameraComponent>().Primary = false;
-
-
-		class CameraController : public ScriptableEntity
-		{
-		public:
-			float m_Speed = 5.0f;
-			void OnCreate()
-			{
-				auto& translation = GetComponent<TransformComponent>().Translation;
-				translation.x = rand() % 10 - 5.0f;
-			}
-
-			void OnUpdate(TimeStep ts) 
-			{
-				auto& translation = GetComponent<TransformComponent>().Translation;
-
-				if (Input::IsKeyPressed(KeyCode::A))
-					translation.x -= m_Speed * ts;
-				if (Input::IsKeyPressed(KeyCode::D))
-					translation.x += m_Speed * ts;
-				if (Input::IsKeyPressed(KeyCode::S))
-					translation.y -= m_Speed * ts;
-				if (Input::IsKeyPressed(KeyCode::W))
-					translation.y += m_Speed * ts;
-			}
-
-			void OnDestroy() {}
-		};
-		m_CameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
-#endif //  0
 
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 	}
@@ -115,6 +67,20 @@ namespace Hazel
 		RenderCommand::Clear();
 
 		m_ActiveScene->OnUpdateEditor(ts, m_EditorCamera);
+
+		auto [mx, my] = ImGui::GetMousePos();
+		mx -= m_ViewportBounds[0].x;
+		my -= m_ViewportBounds[0].y;
+		glm::vec2 viewportSize = m_ViewportBounds[1] - m_ViewportBounds[0];
+		my = viewportSize.y - my;
+
+		int mouseX = (int)mx;
+		int mouseY = (int)my;
+		if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
+		{
+			int pixelData = m_FrameBuffer->ReadPixel(1, mouseX, mouseY);
+			HZ_CORE_INFO("Pixel data: {0}", pixelData);
+		}
 
 		m_FrameBuffer->Unbind();
 	}
@@ -211,6 +177,7 @@ namespace Hazel
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
 		ImGui::Begin("Viewport");
+		auto viewportOffset = ImGui::GetCursorPos(); // Includes tab bar
 
 		m_ViewportFocused = ImGui::IsWindowFocused();
 		m_ViewportHovered = ImGui::IsWindowHovered();
@@ -221,6 +188,15 @@ namespace Hazel
 
 		uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();
 		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+
+		auto windowSize = ImGui::GetWindowSize();
+		ImVec2 minBound = ImGui::GetWindowPos();
+		minBound.x += viewportOffset.x;
+		minBound.y += viewportOffset.y;
+
+		ImVec2 maxBound = { minBound.x + windowSize.x, minBound.y + windowSize.y };
+		m_ViewportBounds[0] = { minBound.x, minBound.y };
+		m_ViewportBounds[1] = { maxBound.x, maxBound.y };
 
 		//Guizmos
 		Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
