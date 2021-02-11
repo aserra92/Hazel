@@ -72,7 +72,7 @@ namespace Hazel {
 				{
 					TransformComponent& transform = view.get<TransformComponent>(entity);
 					SpriteRendererComponent sprite = m_Registry.get<SpriteRendererComponent>(entity);
-					Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color);
+					Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
 				}
 			}
 			Renderer2D::EndScene();
@@ -89,7 +89,7 @@ namespace Hazel {
 			{
 				TransformComponent& transform = view.get<TransformComponent>(entity);
 				SpriteRendererComponent sprite = m_Registry.get<SpriteRendererComponent>(entity);
-				Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color);
+				Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
 			}
 		}
 		Renderer2D::EndScene();
